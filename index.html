@@ -22,13 +22,13 @@
         <div class="form__box">
           <div class="form__group">
             <label for="dayInput" class="form__label">Day</label>
-            <input type="number" id="dayInput" placeholder="DD" class="form__input" min="1" max="31">
+            <input type="number" id="dayInput" placeholder="DD" class="form__input" min="1" max="100">
             <span class="form__error"></span>
           </div>
   
           <div class="form__group">
             <label for="monthInput" class="form__label">Month</label>
-            <input type="number" id="monthInput" placeholder="MM" class="form__input" min="1" max="12">
+            <input type="number" id="monthInput" placeholder="MM" class="form__input" min="1" max="100">
             <span class="form__error"></span>
           </div>
   
@@ -50,9 +50,9 @@
       </form>
 
       <div class="display">
-        <p class="display__box-paragraph"><span class="display__box-number" id="years">- -</span>years</p>
-        <p class="display__box-paragraph"><span class="display__box-number" id="months">- -</span>months</p>
-        <p class="display__box-paragraph"><span class="display__box-number" id="days">- -</span>days</p>
+        <p class="display__paragraph"><span class="display__number" id="years" start-value="0">- -</span>years</p>
+        <p class="display__paragraph"><span class="display__number" id="months" start-value="0">- -</span>months</p>
+        <p class="display__paragraph"><span class="display__number" id="days" start-value="0">- -</span>days</p>
       </div>
     </div>
   </main>

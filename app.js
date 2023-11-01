@@ -1,74 +1,130 @@
 const yearOutput = document.getElementById('years');
 const monthOutput = document.getElementById('months');
 const dayOutput = document.getElementById('days');
+const outputs = document.querySelectorAll('.display__number');
 
-const date = new Date();
-let day = date.getDay();
-let month = date.getMonth() +1;
-let year = date.getFullYear();
+let interval = 500; //animation only
 
-const months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-
+const inputs = document.querySelectorAll('.form__input');
 const monthInput = document.getElementById('monthInput');
 const dayInput = document.getElementById('dayInput');
 const yearInput = document.getElementById('yearInput');
-yearInput.setAttribute('max', year);
 
-document.getElementById('form').addEventListener('submit', handleSubmit);
+// last validation
+let validDay;
+let validMonth;
+let validYear;
+
+const date = new Date();
+let year = date.getFullYear();
+yearInput.setAttribute('max', year);
+let day = date.getDate();
+let month = date.getMonth() +1;
+const months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+document.getElementById('form').addEventListener('submit', e => {
+    handleSubmit(e);
+});
 // lub
 // document.getElementById('form').addEventListener('submit', e => {handleSubmit(e)});
 
+const setError = (input, message) => {
+    input.style.borderColor = 'red';
+    input.parentElement.querySelector('.form__error').innerText = message;
+    input.parentElement.querySelector('.form__label').style.color = 'red';
+};
 
-const validate = () => {
+const setSuccess = input => {
+    input.style.borderColor = 'green';
+    input.parentElement.querySelector('.form__error').innerText = '';
+    input.parentElement.querySelector('.form__label').style.color = 'green';
+};
 
-    const inputs = document.querySelectorAll('.form__input');
-    let validator = true;
-    inputs.forEach(e => {
-        const parent = e.parentElement;
-        if(!e.value) {
-            e.style.borderColor = 'red';
-            parent.querySelector('.form__error').innerText = 'This field is required!';
-            parent.querySelector('.form__label').style.color = 'red';
-            validator = false;
-        } else if(monthInput.value.trim() > 12) {
-            monthInput.style.borderColor = 'red';
-            monthInput.parentElement.querySelector('.form__error').innerText = 'Month must be under 13!';
-            monthInput.parentElement.querySelector('.form__label').style.color = 'red';
-            validator = false;
-        } else if(dayInput.value.trim() > 31) {
-            dayInput.style.borderColor = 'red';
-            dayInput.parentElement.querySelector('.form__error').innerText = 'Day must be under 32!';
-            dayInput.parentElement.querySelector('.form__label').style.color = 'red';
-            validator = false;
-        } else {
-            e.style.borderColor = 'green';
-            parent.querySelector('.form__error').innerText = '';
-            parent.querySelector('.form__label').style.color = 'green';
-            validator = true;
-        }
-    })
-    console.log(validator);
-    return validator;
+function validate () {
+    const dayValue = dayInput.value.trim();
+    const monthValue = monthInput.value.trim();
+    const yearValue = yearInput.value.trim();
+
+    if(!dayValue) {
+        setError(dayInput, 'This field is required!');
+    } else if(parseInt(dayInput.value.trim()) > 31 || 
+                ((parseInt(dayInput.value.trim()) > day) && (parseInt(monthInput.value.trim()) == month)) || 
+                parseInt(dayInput.value.trim()) > months[month]) {
+        setError(dayInput, 'Enter a valid date!')
+    } else {
+        setSuccess(dayInput);
+        validDay = dayValue;
+    }
+
+    if(!monthValue) {
+        setError(monthInput, 'This field is required!');
+    } else if(parseInt(monthInput.value.trim()) > 12 || 
+            ((parseInt(monthInput.value.trim()) > month) && (parseInt(yearInput.value.trim()) === year))) {
+        setError(monthInput, 'Enter a valid date!')
+    } else {
+        setSuccess(monthInput);
+        validMonth = monthValue;
+    }
+
+    if(!yearValue) {
+        setError(yearInput, 'This field is required!');
+    } else {
+        setSuccess(yearInput);
+        validYear = yearValue;
+    }
 }
 
 function handleSubmit (e) {
     e.preventDefault();
-    if(validate()) {
-        if(dayInput > day) {
+
+    validDay = '';
+    validMonth = '';
+    validYear = '';
+
+    validate();
+
+    if(validDay && validMonth && validYear) {
+        day = date.getDate();
+        month = date.getMonth() +1;
+        year = date.getFullYear();
+
+        if(dayInput.value > day) {
             day += months[month-1];
             month -=1;
         }
-        if(monthInput > month) {
+        if(monthInput.value > month) {
             month +=12;
             year -=1;
         }
 
-        const d = day - dayInput.value;
-        const m = month - monthInput.value;
-        const y = year - yearInput.value;
+        const calculatedDay = day - parseInt(dayInput.value);
+        const calculatedMonth = month - parseInt(monthInput.value);
+        const calculatedYear = year - parseInt(yearInput.value);
 
-        dayOutput.innerText = d;
-        monthOutput.innerText = m;
-        yearOutput.innerText = y;
+        ///////////////////////////////////////////
+        // number animation
+        dayOutput.setAttribute('end-value', calculatedDay);
+        monthOutput.setAttribute('end-value', calculatedMonth);
+        yearOutput.setAttribute('end-value', calculatedYear);
+
+        outputs.forEach(e => {
+            let startValue = parseInt(e.getAttribute('start-value'));
+            let endValue = parseInt(e.getAttribute('end-value'));
+        
+            let duration = Math.floor(interval /endValue);
+            let counter = setInterval(() => {
+                if (startValue === endValue) clearInterval(counter); 
+                else if(startValue > endValue) startValue--; 
+                else startValue++;
+                e.innerText = startValue;
+                if(startValue === endValue){
+                    clearInterval(counter);
+                }
+            }, duration)
+        })
+
+        dayOutput.setAttribute('start-value', calculatedDay);
+        monthOutput.setAttribute('start-value', calculatedMonth);
+        yearOutput.setAttribute('start-value', calculatedYear);
     }
 }

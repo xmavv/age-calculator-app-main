@@ -103,6 +103,7 @@ body {
     background-color: var(--purple);
     border: none;
     cursor: pointer;
+    z-index: 10;
 }
 
 .button:hover {
@@ -116,12 +117,67 @@ body {
     line-height: 12rem;
 }
 
-.display__box-paragraph {
+.display__paragraph {
 
 }
 
-.display__box-number {
+.display__number {
     color: var(--purple);
     letter-spacing: -.5rem;
     margin-right: 1rem;
+}
+
+@media screen and (max-width: 56.25em) {
+    html {
+        font-size: 50%;
+    }
+
+    .container {
+        width: 70rem;
+    }
+
+    .form__group {
+        flex: 0 0 33.3333334%;
+    }
+
+    .form__input {
+        width: 90%;
+    }
+}
+
+@media screen and (max-width: 46.875em) {
+    html {
+        font-size: 40%;
+    }
+
+    .container {
+        height: 75rem;
+        width: 60rem;
+    }
+
+    .button_box {
+        justify-content: center;
+        position: relative;
+        margin-bottom: 4rem;
+    }
+    
+    .button_box hr {
+        width: 100%;
+        position: absolute;
+    }
+
+    .form__box {
+        gap: 1rem;
+        margin-bottom: 4rem;
+    }
+}
+
+@media screen and (max-width: 25em) {
+    html {
+        font-size: 30%;
+    }
+
+    .form__input {
+        font-size: 2.7rem;
+    }
 }
