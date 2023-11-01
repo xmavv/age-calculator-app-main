@@ -7,6 +7,8 @@ This is a solution to the [Age calculator app challenge on Frontend Mentor](http
 
 ### The challenge
 
+![Design preview for the Age calculator app coding challenge](./design/desktop-preview.jpg)
+
 this was only to check my skills at the time
 didnt know js could cause that many problems
 - date
